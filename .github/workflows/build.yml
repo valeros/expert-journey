@@ -21,6 +21,6 @@ jobs:
           python-version: "3.9"
       - name: Install PlatformIO
         # Used for pulling cross-platform CMake and Ninja packages
-        run: pip install platformio
+        run: python -m pip install platformio
       - name: Build
         run: python build.py
