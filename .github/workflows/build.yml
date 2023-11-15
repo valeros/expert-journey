@@ -1,0 +1,26 @@
+name: Build Binaries
+
+on: [push]
+
+jobs:
+  build-win64:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: git mingw-w64-x86_64-toolchain mingw-w64-x86_64-libelf
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.9"
+      - name: Install PlatformIO
+        # Used for pulling cross-platform CMake and Ninja packages
+        run: pip install platformio
+      - name: Build
+        run: python build.py
