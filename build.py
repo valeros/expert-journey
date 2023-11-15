@@ -6,6 +6,7 @@ import subprocess
 import tempfile
 import platform
 import re
+import pathlib
 
 from platformio.package.manager.tool import ToolPackageManager
 
@@ -105,7 +106,10 @@ def install_cppcheck(build_dir):
 
 def posix2win(path):
     # quick and dirty way
-    result = path[1] + ":" + path[2:]
+    if path.startswith("/mingw"):
+        result = pathlib.Path.home().drive + path
+    else:
+        result = path[1] + ":" + path[2:]
     print("Converted `%s` to `%s`" % (path, result))
     return result
 
@@ -266,6 +270,7 @@ def extract_version_from_git_env():
     if github_ref:
         original_version = github_ref.replace("refs/tags/", "")
         if original_version:
+            print("Extracted from GITHUB_REF: `%s`" % original_version)
             return original_version
         else:
             print("Warning! There is no refs/tags/* value in $GITHUB_REF")

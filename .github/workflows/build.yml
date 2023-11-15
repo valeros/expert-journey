@@ -14,11 +14,12 @@ jobs:
         with:
           msystem: MINGW64
           install: git mingw-w64-x86_64-toolchain mingw-w64-x86_64-libelf mingw-w64-x86_64-python-pip
-          location: D:\
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
           python-version: "3.9"
+      - name: Show current folder
+        run: ls -al
       - name: Install PlatformIO
         # Used for pulling cross-platform CMake and Ninja packages
         run: python -m pip install platformio
