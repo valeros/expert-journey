@@ -269,7 +269,7 @@ def extract_version_from_git_env():
     github_ref = os.environ.get("GITHUB_REF", "")
     if github_ref:
         # from a tag or a branch name
-        original_version = github_ref.replace("refs/tags/", "").replace("refs/tags/", "refs/heads/release/")
+        original_version = github_ref.replace("refs/tags/", "").replace("refs/heads/release/", "")
         if original_version:
             print("Extracted from GITHUB_REF: `%s`" % original_version)
             return original_version
