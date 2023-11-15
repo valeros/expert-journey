@@ -268,7 +268,8 @@ def convert_version_to_pio_compatible(version):
 def extract_version_from_git_env():
     github_ref = os.environ.get("GITHUB_REF", "")
     if github_ref:
-        original_version = github_ref.replace("refs/tags/", "")
+        # from a tag or a branch name
+        original_version = github_ref.replace("refs/tags/", "").replace("refs/tags/", "refs/heads/release/")
         if original_version:
             print("Extracted from GITHUB_REF: `%s`" % original_version)
             return original_version
