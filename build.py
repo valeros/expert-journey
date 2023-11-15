@@ -105,7 +105,9 @@ def install_cppcheck(build_dir):
 
 def posix2win(path):
     # quick and dirty way
-    return path[1] + ":" + path[2:]
+    result = path[1] + ":" + path[2:]
+    print("Converted `%s` to `%s`" % (path, result))
+    return result
 
 
 def extract_dynamic_libraries(binary_path, allowed_paths=None):
