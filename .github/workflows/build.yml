@@ -29,23 +29,23 @@ jobs:
           path: result/tool-cppcheck-*.tar.gz
         
 
-    build-lin64:
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2
-        - name: Set up Python
-          uses: actions/setup-python@v3
-          with:
-            python-version: "3.9"
-        - name: Install PlatformIO
-          # Used for pulling cross-platform CMake and Ninja packages
-          run: python -m pip install platformio
-        - name: Build
-          run: python build.py
-        - name: Attach artifact
-          uses: actions/upload-artifact@v3
-          with:
-            path: result/tool-cppcheck-*.tar.gz
+  build-lin64:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.9"
+      - name: Install PlatformIO
+        # Used for pulling cross-platform CMake and Ninja packages
+        run: python -m pip install platformio
+      - name: Build
+        run: python build.py
+      - name: Attach artifact
+        uses: actions/upload-artifact@v3
+        with:
+          path: result/tool-cppcheck-*.tar.gz
 
   # build-armv7l:
   #   runs-on: ubuntu-latest
@@ -64,20 +64,20 @@ jobs:
   #           ldd /home/runner/.platformio/packages/tool-cmake/bin/cmake
 
 
-    build-darwin-x64:
-      runs-on: macos-latest
-      steps:
-        - uses: actions/checkout@v2
-        - name: Set up Python
-          uses: actions/setup-python@v3
-          with:
-            python-version: "3.9"
-        - name: Install PlatformIO
-          # Used for pulling cross-platform CMake and Ninja packages
-          run: python -m pip install platformio
-        - name: Build
-          run: python build.py
-        - name: Attach artifact
-          uses: actions/upload-artifact@v3
-          with:
-            path: result/tool-cppcheck-*.tar.gz
+  build-darwin-x64:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.9"
+      - name: Install PlatformIO
+        # Used for pulling cross-platform CMake and Ninja packages
+        run: python -m pip install platformio
+      - name: Build
+        run: python build.py
+      - name: Attach artifact
+        uses: actions/upload-artifact@v3
+        with:
+          path: result/tool-cppcheck-*.tar.gz
