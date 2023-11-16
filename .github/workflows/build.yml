@@ -49,4 +49,5 @@ jobs:
           base_image: raspios_lite:latest
           image_additional_mb: 1024
           commands: |
+            python -m pip install platformio
             python build.py
