@@ -29,7 +29,11 @@ def is_program_installed(program_name):
 
 
 def check_requirements(build_dir):
-    cmake_dir = os.path.join(get_piopkg_dir("tool-cmake"), "bin")
+    cmake_path = shutil.which("cmake")
+    if cmake_path:
+        cmake_dir = os.path.basename(cmake_path)
+    else:
+        cmake_dir = os.path.join(get_piopkg_dir("tool-cmake"), "bin")
     ninja_dir = os.path.join(get_piopkg_dir("tool-ninja"))
     os.environ["PATH"] = os.pathsep.join([cmake_dir, ninja_dir] + [os.environ["PATH"]])
 
