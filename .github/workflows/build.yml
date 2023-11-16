@@ -28,8 +28,6 @@ jobs:
       runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v2
-        - name: Install Dependenncies
-          run: sudo apt-get install -y git python python-pip
         - name: Set up Python
           uses: actions/setup-python@v3
           with:
