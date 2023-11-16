@@ -46,7 +46,7 @@ jobs:
         id: build_image
         with:
           cpu: cortex-a7
-          base_image: raspios_lite:2022-04-04
+          base_image: raspios_oldstable_lite:2023-05-03
           image_additional_mb: 1024
           commands: |
             sudo apt-get install -y python3 python3-pip libssl1.1
