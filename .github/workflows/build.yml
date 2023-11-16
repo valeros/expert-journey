@@ -49,6 +49,6 @@ jobs:
           base_image: raspios_lite:latest
           image_additional_mb: 1024
           commands: |
-            sudo apt-get install -y python3 python3-pip
+            sudo apt-get install -y python3 python3-pip libssl1.1
             python3 -m pip install platformio --break-system-packages
             python3 build.py
