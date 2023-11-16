@@ -11,7 +11,7 @@ import pathlib
 from platformio.package.manager.tool import ToolPackageManager
 
 # CMake (> 3.15) and Ninja deps are pulled from PlatformIO Registry
-REQUIRED_PREREQUISITE_APPS = ("cmake", "ninja", "ldd", "platformio", "gcc", "g++", "ldd")
+REQUIRED_PREREQUISITE_APPS = ["cmake", "ninja", "platformio", "gcc", "g++"]
 PIO_PKG_MANAGER = ToolPackageManager()
 
 # Folder that will be used to compile files
@@ -23,6 +23,9 @@ RESULT_DIR = os.path.join(os.getcwd(), "result")
 # Used for installing local CMake and Ninja
 
 IS_WINDOWS = platform.system().lower().startswith("win")
+
+if IS_WINDOWS:
+    REQUIRED_PREREQUISITE_APPS.append("ldd")
 
 def is_program_installed(program_name):
     return shutil.which(program_name)
