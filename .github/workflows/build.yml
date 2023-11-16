@@ -69,7 +69,7 @@ jobs:
         - name: Build
           run: python build.py
         - name: Attach artifact
-        - uses: actions/upload-artifact@v3
+          uses: actions/upload-artifact@v3
           with:
             name: Mac OS Intel 64-bit
             path: result/tool-cppcheck-*.tar.gz
