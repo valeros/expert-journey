@@ -24,16 +24,29 @@ jobs:
   #     - name: Build
   #       run: python build.py
 
-    build-lin64:
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2
-        - name: Set up Python
-          uses: actions/setup-python@v3
-          with:
-            python-version: "3.9"
-        - name: Install PlatformIO
-          # Used for pulling cross-platform CMake and Ninja packages
-          run: python -m pip install platformio
-        - name: Build
-          run: python build.py
+    # build-lin64:
+    #   runs-on: ubuntu-latest
+    #   steps:
+    #     - uses: actions/checkout@v2
+    #     - name: Set up Python
+    #       uses: actions/setup-python@v3
+    #       with:
+    #         python-version: "3.9"
+    #     - name: Install PlatformIO
+    #       # Used for pulling cross-platform CMake and Ninja packages
+    #       run: python -m pip install platformio
+    #     - name: Build
+    #       run: python build.py
+
+  build-armv7l:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pguyot/arm-runner-action@v2
+        id: build_image
+        with:
+          cpu: cortex-a7
+          base_image: raspios_lite:latest
+          image_additional_mb: 1024
+          commands: |
+            python build.py
