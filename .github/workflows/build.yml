@@ -47,7 +47,7 @@ jobs:
       - name: Attach artifact
         uses: actions/upload-artifact@v3
         with:
-          name: cppcheck-lin64
+          # name: cppcheck-lin64
           path: result/tool-cppcheck-*.tar.gz
           retention-days: 1
 
@@ -84,7 +84,7 @@ jobs:
       - name: Attach artifact
         uses: actions/upload-artifact@v3
         with:
-          name: cppcheck-darwin64
+          # name: cppcheck-darwin64
           path: result/tool-cppcheck-*.tar.gz
           retention-days: 1
 
