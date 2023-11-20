@@ -34,7 +34,7 @@ jobs:
   build-lin64:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
@@ -51,27 +51,10 @@ jobs:
           path: result/tool-cppcheck-*.tar.gz
           retention-days: 1
 
-  # build-armv7l:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - uses: pguyot/arm-runner-action@v2
-  #       id: build_image
-  #       with:
-  #         cpu: cortex-a7
-  #         base_image: raspios_lite:latest
-  #         image_additional_mb: 1024
-  #         commands: |
-  #           sudo apt-get install -y cmake python3 python3-pip
-  #           python3 -m pip install platformio --break-system-packages
-  #           python3 build.py
-  #           ldd /home/runner/.platformio/packages/tool-cmake/bin/cmake
-
-
   build-darwin-x64:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
@@ -80,6 +63,8 @@ jobs:
         # Used for pulling cross-platform CMake and Ninja packages
         run: python -m pip install platformio
       - name: Build
+        env:
+          PLATFORMIO_PACKAGE_SYSTEM_VALUES: "darwin_x86_64,darwin_arm64"
         run: python build.py
       - name: Attach artifact
         uses: actions/upload-artifact@v3
@@ -89,7 +74,7 @@ jobs:
           retention-days: 1
 
   release:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     needs: [build-win64, build-lin64, build-darwin-x64]
     steps:
       - uses: actions/checkout@v2
@@ -107,3 +92,18 @@ jobs:
 
 
 
+  # build-armv7l:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: pguyot/arm-runner-action@v2
+  #       id: build_image
+  #       with:
+  #         cpu: cortex-a7
+  #         base_image: raspios_lite:latest
+  #         image_additional_mb: 1024
+  #         commands: |
+  #           sudo apt-get install -y cmake python3 python3-pip
+  #           python3 -m pip install platformio --break-system-packages
+  #           python3 build.py
+  #           ldd /home/runner/.platformio/packages/tool-cmake/bin/cmake
