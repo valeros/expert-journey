@@ -3,7 +3,7 @@ name: Build Binaries
 on: [push]
 
 jobs:
-  build:
+  build-armhf:
     runs-on: ubuntu-latest
 
     steps:
@@ -15,6 +15,7 @@ jobs:
         with:
           arch: armv7
           distro: ubuntu20.04
+          githubToken: ${{ github.token }}
           
           # Create an artifacts directory
           setup: |
@@ -22,15 +23,23 @@ jobs:
           
           # Mount the artifacts directory as /artifacts in the container
           dockerRunArgs: |
-            --volume "${PWD}/artifacts:/artifacts"
+            --volume "${PWD}/result:/artifacts"
       
           run: |
             apt-get update -y
             apt-get install -y python3 python3-pip
             python3 -m pip install platformio
             python3 build.py
-            #Copy built binary file to artifacts directory
+            # Copy built binary file to artifacts directory
             cp result/tool-cppcheck-*.tar.gz /artifacts
+      - name: Display structure of downloaded files
+        run: ls -R result
+      # - name: Attach artifact
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: cppcheck-armhf
+      #     path: result/tool-cppcheck-*.tar.gz
+      #     retention-days: 1
     
   # build-win64:
   #   runs-on: windows-latest

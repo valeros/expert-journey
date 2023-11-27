@@ -98,6 +98,7 @@ def configure_cmake_project(build_dir, install_dir, cmake_extra_flags=None):
         "-DBUILD_SHARED_LIBS=NO",
         "-DCMAKE_BUILD_TYPE=Release",
         "-DUSE_MATCHCOMPILER=ON",
+        "-DDISABLE_DMAKE=On",
         "-DFILESDIR=%s" % install_dir,
         "-DCMAKE_INSTALL_PREFIX:PATH=%s" % install_dir,
     )
