@@ -25,6 +25,7 @@ jobs:
             --volume "${PWD}/artifacts:/artifacts"
       
           run: |
+            apt-get install -y python3
             python3 build.py
             #Copy built binary file to artifacts directory
             cp result/tool-cppcheck-*.tar.gz /artifacts
