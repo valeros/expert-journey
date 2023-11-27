@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
-      - uses: uraimo/run-on-arch-action@v2.1.1
+      - uses: uraimo/run-on-arch-action@v2.6.0
         name: Install dependencies and build Cppcheck
         id: build
         with:
@@ -26,7 +26,8 @@ jobs:
       
           run: |
             apt-get update -y
-            apt-get install -y python3
+            apt-get install -y python3 python3-pip
+            python3 -m pip install platformio
             python3 build.py
             #Copy built binary file to artifacts directory
             cp result/tool-cppcheck-*.tar.gz /artifacts
