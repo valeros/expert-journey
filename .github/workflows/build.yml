@@ -31,7 +31,7 @@ jobs:
             python3 -m pip install platformio
             python3 build.py
             # Copy built binary file to artifacts directory
-            cp result/tool-cppcheck-*.tar.gz /artifacts
+            # cp result/tool-cppcheck-*.tar.gz /artifacts
       - name: Display structure of downloaded files
         run: ls -R result
       # - name: Attach artifact
