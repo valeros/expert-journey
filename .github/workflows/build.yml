@@ -71,7 +71,7 @@ jobs:
       - name: Attach artifact
         uses: actions/upload-artifact@v3
         with:
-          name: cppcheck-armhf
+          name: cppcheck-aarch64
           path: result/tool-cppcheck-*.tar.gz
           retention-days: 1
     
