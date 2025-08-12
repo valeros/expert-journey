@@ -39,7 +39,7 @@ jobs:
           git clone --branch "${{ github.event.inputs.cppcheck_version }}" --depth 1 https://github.com/danmar/cppcheck.git cppcheck-src
 
       - name: Build Cppcheck
-        run: python build.py
+        run: python ../build.py
         working-directory: cppcheck-src
         # env:
         #   PLATFORMIO_PACKAGE_VERSION: ${{ github.event.inputs.cppcheck_version }}
