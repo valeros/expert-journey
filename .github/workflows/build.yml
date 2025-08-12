@@ -1,0 +1,170 @@
+name: Build and Release Cppcheck packages
+
+on:
+  workflow_dispatch:
+    inputs:
+      cppcheck_version:
+        description: "Version of Cppcheck to build (e.g. 2.14.2)"
+        required: true
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        os:
+          - "ubuntu-22.04"
+          # - "macos-13-large"   # x86_64
+          # - "macos-13-xlarge"  # Arm64
+          # # - "windows-2022"   # Binary for Win is build in a separate job
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.10"
+      
+      - name: Install PlatformIO
+        # Used for pulling cross-platform CMake and Ninja packages
+        run: python -m pip install platformio
+      
+      - name: Build
+        run: python build.py
+
+      - name: Download Cppcheck source
+        run: |
+          git clone --branch ${{ github.event.inputs.cppcheck_version }} --depth 1 https://github.com/danmar/cppcheck.git
+
+      - name: Build Cppcheck
+        run: python build.py
+
+      - name: Attach artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: cppcheck-lin64
+          path: result/tool-cppcheck-*.tar.gz
+          retention-days: 1
+
+  # build-armhf:
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - uses: actions/checkout@v4
+      
+  #     - uses: uraimo/run-on-arch-action@v2.6.0
+  #       name: Install dependencies and build Cppcheck
+  #       id: build
+  #       with:
+  #         arch: armv7
+  #         distro: ubuntu20.04
+  #         githubToken: ${{ github.token }}
+          
+  #         # Create an artifacts directory
+  #         setup: |
+  #           mkdir -p "${PWD}/artifacts"
+          
+  #         # Mount the artifacts directory as /artifacts in the container
+  #         dockerRunArgs: |
+  #           --volume "${PWD}/result:/artifacts"
+      
+  #         run: |
+  #           apt-get update -y
+  #           apt-get install -y python3 python3-pip
+  #           python3 -m pip install platformio
+  #           python3 build.py
+  #     - name: Display structure of downloaded files
+  #       run: ls -R result
+  #     - name: Attach artifact
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: cppcheck-armhf
+  #         path: result/tool-cppcheck-*.tar.gz
+  #         retention-days: 1
+  
+  # build-aarch64:
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - uses: actions/checkout@v2
+      
+  #     - uses: uraimo/run-on-arch-action@v2.6.0
+  #       name: Install dependencies and build Cppcheck
+  #       id: build
+  #       with:
+  #         arch: aarch64
+  #         distro: ubuntu20.04
+  #         githubToken: ${{ github.token }}
+          
+  #         # Create an artifacts directory
+  #         setup: |
+  #           mkdir -p "${PWD}/artifacts"
+          
+  #         # Mount the artifacts directory as /artifacts in the container
+  #         dockerRunArgs: |
+  #           --volume "${PWD}/result:/artifacts"
+      
+  #         run: |
+  #           apt-get update -y
+  #           apt-get install -y python3 python3-pip
+  #           python3 -m pip install platformio
+  #           python3 build.py
+  #     - name: Display structure of downloaded files
+  #       run: ls -R result
+  #     - name: Attach artifact
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: cppcheck-aarch64
+  #         path: result/tool-cppcheck-*.tar.gz
+  #         retention-days: 1
+    
+  # build-win64:
+  #   runs-on: windows-latest
+  #   defaults:
+  #     run:
+  #       shell: msys2 {0}
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: msys2/setup-msys2@v2
+  #       with:
+  #         msystem: MINGW64
+  #         install: git mingw-w64-x86_64-toolchain mingw-w64-x86_64-libelf mingw-w64-x86_64-python-pip
+  #     - name: Set up Python
+  #       uses: actions/setup-python@v3
+  #       with:
+  #         python-version: "3.9"
+  #     - name: Install PlatformIO
+  #       # Used for pulling cross-platform CMake and Ninja packages
+  #       run: python -m pip install platformio
+  #     - name: Build
+  #       run: python build.py
+  #     - name: Attach artifact
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: cppcheck-win64
+  #         path: result/tool-cppcheck-*.tar.gz
+  #         retention-days: 1
+
+  # release:
+  #   name: Create GitHub Release
+  #   runs-on: ubuntu-latest
+  #   needs: build
+  #   steps:
+  #     - name: Download all build artifacts
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         path: ./artifacts
+
+  #     - name: Create Release
+  #       uses: softprops/action-gh-release@v2
+  #       with:
+  #         tag_name: v${{ github.event.inputs.package_version }}
+  #         name: "Package v${{ github.event.inputs.package_version }}"
+  #         files: ./artifacts/**/*
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
