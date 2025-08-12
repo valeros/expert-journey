@@ -182,7 +182,7 @@ def prepare_package(install_dir):
 
     if IS_WINDOWS:
         print("Copying MSYS dynamic libraries for Windows")
-        copy_msys_lib_deps(binary_path, allowed_paths=["msys64"])
+        copy_msys_lib_deps(binary_path, allowed_paths=["msys64", "mingw64"])
 
 
 def validate_package(install_dir):

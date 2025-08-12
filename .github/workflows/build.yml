@@ -58,7 +58,52 @@ jobs:
   #         path: cppcheck-src/result/tool-cppcheck-*.tar.gz
   #         retention-days: 1
 
-  build-armhf:
+  # build-armhf:
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - uses: actions/checkout@v4
+
+  #     - name: Download Cppcheck source
+  #       run: |
+  #         git clone --branch "${{ github.event.inputs.cppcheck_version }}" --depth 1 https://github.com/danmar/cppcheck.git cppcheck-src
+      
+  #     - uses: uraimo/run-on-arch-action@v3
+  #       name: Install dependencies and build Cppcheck
+  #       id: build
+  #       with:
+  #         arch: armv7
+  #         distro: ubuntu20.04
+  #         githubToken: ${{ github.token }}
+          
+  #         # Create an artifacts directory
+  #         setup: |
+  #           mkdir -p "${PWD}/artifacts"
+          
+  #         # Mount the artifacts directory as /artifacts in the container
+  #         dockerRunArgs: |
+  #           --volume "${PWD}/result:/artifacts"
+      
+  #         run: |
+  #           apt-get update -y
+  #           apt-get install -y python3 python3-pip git
+  #           python3 -m pip install platformio
+  #           # Needed to avoid "dubious ownership in repository" error
+  #           git config --global --add safe.directory ${PWD}/cppcheck-src
+  #           cd cppcheck-src
+  #           python3 ../build.py
+      
+  #     - name: Display structure of downloaded files
+  #       run: ls -R result
+      
+  #     - name: Attach artifact
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: cppcheck-armhf
+  #         path: cppcheck-src/result/tool-cppcheck-*.tar.gz
+  #         retention-days: 1
+  
+  build-aarch64:
     runs-on: ubuntu-latest
 
     steps:
@@ -72,7 +117,7 @@ jobs:
         name: Install dependencies and build Cppcheck
         id: build
         with:
-          arch: armv7
+          arch: aarch64
           distro: ubuntu20.04
           githubToken: ${{ github.token }}
           
@@ -88,6 +133,8 @@ jobs:
             apt-get update -y
             apt-get install -y python3 python3-pip git
             python3 -m pip install platformio
+            # Needed to avoid "dubious ownership in repository" error
+            git config --global --add safe.directory ${PWD}/cppcheck-src
             cd cppcheck-src
             python3 ../build.py
       
@@ -97,45 +144,9 @@ jobs:
       - name: Attach artifact
         uses: actions/upload-artifact@v4
         with:
-          name: cppcheck-armhf
+          name: cppcheck-aarch64
           path: cppcheck-src/result/tool-cppcheck-*.tar.gz
           retention-days: 1
-  
-  # build-aarch64:
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #     - uses: actions/checkout@v2
-      
-  #     - uses: uraimo/run-on-arch-action@v2.6.0
-  #       name: Install dependencies and build Cppcheck
-  #       id: build
-  #       with:
-  #         arch: aarch64
-  #         distro: ubuntu20.04
-  #         githubToken: ${{ github.token }}
-          
-  #         # Create an artifacts directory
-  #         setup: |
-  #           mkdir -p "${PWD}/artifacts"
-          
-  #         # Mount the artifacts directory as /artifacts in the container
-  #         dockerRunArgs: |
-  #           --volume "${PWD}/result:/artifacts"
-      
-  #         run: |
-  #           apt-get update -y
-  #           apt-get install -y python3 python3-pip
-  #           python3 -m pip install platformio
-  #           python3 build.py
-  #     - name: Display structure of downloaded files
-  #       run: ls -R result
-  #     - name: Attach artifact
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: cppcheck-aarch64
-  #         path: result/tool-cppcheck-*.tar.gz
-  #         retention-days: 1
     
   # build-win64:
   #   runs-on: windows-latest
@@ -176,7 +187,7 @@ jobs:
   release:
     name: Create GitHub Release
     runs-on: ubuntu-latest
-    needs: [build-armhf]
+    needs: [build-aarch64]
     steps:
       - name: Download all build artifacts
         uses: actions/download-artifact@v4
@@ -187,7 +198,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ github.event.inputs.cppcheck_version }}
-          name: "Package v${{ github.event.inputs.cppcheck_version }}"
+          name: "v${{ github.event.inputs.cppcheck_version }}"
           files: ./artifacts/**/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
