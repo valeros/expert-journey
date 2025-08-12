@@ -73,7 +73,7 @@ jobs:
         id: build
         with:
           arch: armv7
-          distro: ubuntu20.04
+          distro: ubuntu22.04
           githubToken: ${{ github.token }}
           
           # Create an artifacts directory
