@@ -40,7 +40,7 @@ jobs:
       
       - name: "Install MinGW toolchain for Windows"
         if: matrix.os == 'windows-2022'
-      - uses: msys2/setup-msys2@v2
+        uses: msys2/setup-msys2@v2
         with:
           msystem: MINGW64
           install: git mingw-w64-x86_64-toolchain mingw-w64-x86_64-libelf mingw-w64-x86_64-python-pip
