@@ -33,19 +33,20 @@ jobs:
       - name: Install PlatformIO
         # Used for pulling cross-platform CMake and Ninja packages
         run: python -m pip install platformio
-      
-      - name: Build
-        run: python build.py
 
       - name: Download Cppcheck source
         run: |
-          git clone --branch ${{ github.event.inputs.cppcheck_version }} --depth 1 https://github.com/danmar/cppcheck.git
+          git clone --branch "${{ github.event.inputs.cppcheck_version }}" --depth 1 https://github.com/danmar/cppcheck.git cppcheck-src
 
       - name: Build Cppcheck
         run: python build.py
+        working-directory: cppcheck-src
+        # env:
+        #   PLATFORMIO_PACKAGE_VERSION: ${{ github.event.inputs.cppcheck_version }}
 
       - name: Attach artifact
         uses: actions/upload-artifact@v4
+        working-directory: cppcheck-src
         with:
           name: cppcheck-lin64
           path: result/tool-cppcheck-*.tar.gz
