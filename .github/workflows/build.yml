@@ -16,7 +16,7 @@ jobs:
       matrix:
         os:
           # - "ubuntu-22.04"
-          - "macos-14-large"   # x86_64
+          - "macos-latest-large"   # x86_64
           # - "macos-13-xlarge"  # Arm64
           # - "windows-2022"   # Binary for Win is build in a separate job
 
