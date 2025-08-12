@@ -275,26 +275,12 @@ def convert_version_to_pio_compatible(version):
 
 
 def extract_version_from_git_env():
-    # github_ref = os.environ.get("GITHUB_REF", "")
-    # if github_ref:
-    #     # from a tag or a branch name
-    #     original_version = github_ref.replace("refs/tags/", "").replace("refs/heads/release/", "")
-    #     if original_version:
-    #         print("Extracted from GITHUB_REF: `%s`" % original_version)
-    #         return original_version
-    #     else:
-    #         print("Warning! There is no refs/tags/* value in $GITHUB_REF")
-    # else:
-    #     print(
-    #         "Warning! GITHUB_REF is not available. Extracting version directly form Git..."
-    #     )
-    #     # "git describe --tags  --match"
     res = exec_command(["git", "describe", "--tags"])
     if res["returncode"] == 0:
         return res["out"].strip()
 
     print(
-        "Warning! Failed to extract version value from the `GITHUB_REF` variable! "
+        "Warning! Failed to extract version value! "
         "Default '1.0.0` will be used!'"
     )
     print(str(res["err"]))

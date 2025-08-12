@@ -150,21 +150,21 @@ jobs:
   #         path: result/tool-cppcheck-*.tar.gz
   #         retention-days: 1
 
-  # release:
-  #   name: Create GitHub Release
-  #   runs-on: ubuntu-latest
-  #   needs: build
-  #   steps:
-  #     - name: Download all build artifacts
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         path: ./artifacts
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./artifacts
 
-  #     - name: Create Release
-  #       uses: softprops/action-gh-release@v2
-  #       with:
-  #         tag_name: v${{ github.event.inputs.package_version }}
-  #         name: "Package v${{ github.event.inputs.package_version }}"
-  #         files: ./artifacts/**/*
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ github.event.inputs.cppcheck_version }}
+          name: "Package v${{ github.event.inputs.cppcheck_version }}"
+          files: ./artifacts/**/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
