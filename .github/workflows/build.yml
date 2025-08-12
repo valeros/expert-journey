@@ -46,10 +46,9 @@ jobs:
 
       - name: Attach artifact
         uses: actions/upload-artifact@v4
-        working-directory: cppcheck-src
         with:
           name: cppcheck-lin64
-          path: result/tool-cppcheck-*.tar.gz
+          path: cppcheck-src/result/tool-cppcheck-*.tar.gz
           retention-days: 1
 
   # build-armhf:
