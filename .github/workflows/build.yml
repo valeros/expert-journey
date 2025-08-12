@@ -86,7 +86,7 @@ jobs:
       
           run: |
             apt-get update -y
-            apt-get install -y python3 python3-pip
+            apt-get install -y python3 python3-pip git
             python3 -m pip install platformio
             cd cppcheck-src
             python3 ../build.py
