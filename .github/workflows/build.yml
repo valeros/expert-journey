@@ -68,7 +68,7 @@ jobs:
         run: |
           git clone --branch "${{ github.event.inputs.cppcheck_version }}" --depth 1 https://github.com/danmar/cppcheck.git cppcheck-src
       
-      - uses: uraimo/run-on-arch-action@v2.6.0
+      - uses: uraimo/run-on-arch-action@v3
         name: Install dependencies and build Cppcheck
         id: build
         with:
