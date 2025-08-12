@@ -16,9 +16,9 @@ jobs:
       matrix:
         os:
           - "ubuntu-22.04"
-          # - "macos-13-large"   # x86_64
-          # - "macos-13-xlarge"  # Arm64
-          # # - "windows-2022"   # Binary for Win is build in a separate job
+          - "macos-13-large"   # x86_64
+          - "macos-13-xlarge"  # Arm64
+          - "windows-2022"   # Binary for Win is build in a separate job
 
     steps:
       - name: Checkout repository
@@ -37,7 +37,14 @@ jobs:
       - name: Download Cppcheck source
         run: |
           git clone --branch "${{ github.event.inputs.cppcheck_version }}" --depth 1 https://github.com/danmar/cppcheck.git cppcheck-src
-
+      
+      - name: "Install MinGW toolchain for Windows"
+        if: matrix.os == 'windows-2022'
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          install: git mingw-w64-x86_64-toolchain mingw-w64-x86_64-libelf mingw-w64-x86_64-python-pip
+      
       - name: Build Cppcheck
         run: python ../build.py
         working-directory: cppcheck-src
@@ -47,7 +54,7 @@ jobs:
       - name: Attach artifact
         uses: actions/upload-artifact@v4
         with:
-          name: cppcheck-lin64
+          name: cppcheck-${{ matrix.os }}
           path: cppcheck-src/result/tool-cppcheck-*.tar.gz
           retention-days: 1
 
@@ -137,17 +144,26 @@ jobs:
   #     - name: Set up Python
   #       uses: actions/setup-python@v3
   #       with:
-  #         python-version: "3.9"
+  #         python-version: "3.10"
   #     - name: Install PlatformIO
   #       # Used for pulling cross-platform CMake and Ninja packages
   #       run: python -m pip install platformio
-  #     - name: Build
-  #       run: python build.py
+      
+  #     - name: Download Cppcheck source
+  #       run: |
+  #         git clone --branch "${{ github.event.inputs.cppcheck_version }}" --depth 1 https://github.com/danmar/cppcheck.git cppcheck-src
+
+  #     - name: Build Cppcheck
+  #       run: python ../build.py
+  #       working-directory: cppcheck-src
+  #       # env:
+  #       #   PLATFORMIO_PACKAGE_VERSION: ${{ github.event.inputs.cppcheck_version }}
+
   #     - name: Attach artifact
   #       uses: actions/upload-artifact@v4
   #       with:
   #         name: cppcheck-win64
-  #         path: result/tool-cppcheck-*.tar.gz
+  #         path: cppcheck-src/result/tool-cppcheck-*.tar.gz
   #         retention-days: 1
 
   release:
