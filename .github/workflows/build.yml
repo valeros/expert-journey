@@ -16,9 +16,9 @@ jobs:
       matrix:
         os:
           # - "ubuntu-22.04"
-          # - "macos-latest-large"   # x86_64
+          - "macos-latest"   # x86_64
           # - "macos-13-xlarge"  # Arm64
-          - "windows-2022"   # Binary for Win
+          # - "windows-2022"   # Binary for Win
 
     steps:
       - name: Checkout repository
@@ -202,3 +202,4 @@ jobs:
           files: ./artifacts/**/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
