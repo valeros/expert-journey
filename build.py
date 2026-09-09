@@ -23,6 +23,7 @@ RESULT_DIR = os.path.join(os.getcwd(), "result")
 # Used for installing local CMake and Ninja
 
 IS_WINDOWS = platform.system().lower().startswith("win")
+IS_MACOS = platform.system().lower().startswith("darwin")
 
 if IS_WINDOWS:
     REQUIRED_PREREQUISITE_APPS.append("ldd")
@@ -82,13 +83,14 @@ def get_piopkg_dir(package_name):
 
 def run_cmake(args=None):
     args = args or tuple()
+    print("Running CMake with arguments", args)
     res = exec_command(("cmake",) + args)
     validate_exec_command(res, "CMake failed to run with args %s" % " ".join(args))
 
 
 def configure_cmake_project(build_dir, install_dir, cmake_extra_flags=None):
     print("Configuring CMake...")
-    cmake_args = (
+    cmake_args = [
         "-B",
         build_dir,
         "-S",
@@ -101,7 +103,11 @@ def configure_cmake_project(build_dir, install_dir, cmake_extra_flags=None):
         "-DDISABLE_DMAKE=On",
         "-DFILESDIR=%s" % install_dir,
         "-DCMAKE_INSTALL_PREFIX:PATH=%s" % install_dir,
-    )
+    ]
+
+    if IS_MACOS:
+        # Special variable to force CMake to build a univeral binary for both arch
+        cmake_args.append('CMAKE_OSX_ARCHITECTURES="arm64;x86_64"')    
 
     run_cmake(cmake_args)
 
@@ -211,6 +217,9 @@ def validate_package(install_dir):
         [os.path.join(install_dir, normalize_binary("cppcheck")), "--version"]
     )
     validate_exec_command(res, "Failed to validate final viable binary")
+
+    # Check the binary architecture
+    subprocess.run(["file", os.path.join(install_dir, normalize_binary("cppcheck"))]) 
 
 
 def create_pio_package(package_dir, result_dir):
