@@ -16,8 +16,11 @@ jobs:
       matrix:
         os:
           # - "ubuntu-22.04"
-          - "macos-latest"   # Aarch64 + x64
           # - "windows-2022"   # Binary for Win
+          - "macos-latest"   # Aarch64 + x64
+             env:
+               PLATFORMIO_PACKAGE_SYSTEM_VALUES: "darwin_x86_64,darwin_arm64"
+
 
     steps:
       - name: Checkout repository
