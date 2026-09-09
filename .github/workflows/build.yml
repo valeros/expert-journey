@@ -18,9 +18,6 @@ jobs:
           # - "ubuntu-22.04"
           # - "windows-2022"   # Binary for Win
           - "macos-latest"   # Aarch64 + x64
-             env:
-               PLATFORMIO_PACKAGE_SYSTEM_VALUES: "darwin_x86_64,darwin_arm64"
-
 
     steps:
       - name: Checkout repository
@@ -45,6 +42,10 @@ jobs:
         with:
           msystem: MINGW64
           install: git mingw-w64-x86_64-toolchain mingw-w64-x86_64-libelf mingw-w64-x86_64-python-pip
+
+      - name: "Set architecture for MacOS univeral build"
+        if: runner.os == 'macOS'
+        run: echo "PLATFORMIO_PACKAGE_SYSTEM_VALUES=darwin_x86_64,darwin_arm64" >> "$GITHUB_ENV"
       
       - name: Build Cppcheck
         run: python ../build.py
