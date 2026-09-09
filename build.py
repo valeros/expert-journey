@@ -59,7 +59,7 @@ def normalize_binary(binary_name):
 
 
 def exec_command(args):
-    proc = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    proc = subprocess.Popen(args, stdout=subprocess.STDOUT, stderr=subprocess.STDOUT)
     out, err = proc.communicate()
     exitcode = proc.returncode
     return {"returncode": exitcode, "out": out.decode("utf-8"), "err": err}
