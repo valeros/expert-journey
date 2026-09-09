@@ -133,8 +133,8 @@ jobs:
             apt-get update -y
             apt-get install -y python3 python3-pip git
             gcc --version
-            sudo apt install --only-upgrade gcc
-            sudo apt install --only-upgrade g++
+            apt install --only-upgrade gcc
+            apt install --only-upgrade g++
             gcc --version
             python3 -m pip install platformio
             # Needed to avoid "dubious ownership in repository" error
