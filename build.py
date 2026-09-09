@@ -107,7 +107,7 @@ def configure_cmake_project(build_dir, install_dir, cmake_extra_flags=None):
 
     if IS_MACOS:
         # Special variable to force CMake to build a univeral binary for both arch
-        cmake_args.append('-DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"')    
+        cmake_args.append("-DCMAKE_OSX_ARCHITECTURES=arm64;x86_64")    
 
     run_cmake(cmake_args)
 
