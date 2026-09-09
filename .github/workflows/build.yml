@@ -50,15 +50,15 @@ jobs:
       - name: Build Cppcheck
         run: python ../build.py
         working-directory: cppcheck-src
-        # env:
-        #   PLATFORMIO_PACKAGE_VERSION: ${{ github.event.inputs.cppcheck_version }}
+        env:
+          PLATFORMIO_PACKAGE_VERSION: ${{ github.event.inputs.cppcheck_version }}
 
-      # - name: Attach artifact
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: cppcheck-${{ matrix.os }}
-      #     path: cppcheck-src/result/tool-cppcheck-*.tar.gz
-      #     retention-days: 1
+      - name: Attach artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cppcheck-${{ matrix.os }}
+          path: cppcheck-src/result/tool-cppcheck-*.tar.gz
+          retention-days: 1
 
   # build-armhf:
   #   runs-on: ubuntu-latest
