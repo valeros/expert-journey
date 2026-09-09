@@ -58,8 +58,8 @@ def normalize_binary(binary_name):
     return binary_name + ".exe" if IS_WINDOWS else binary_name
 
 
-def exec_command(args):
-    proc = subprocess.Popen(args, stdout=subprocess.STDOUT, stderr=subprocess.STDOUT)
+def exec_command(args, show_output=False):
+    proc = subprocess.Popen(args)
     out, err = proc.communicate()
     exitcode = proc.returncode
     return {"returncode": exitcode, "out": out.decode("utf-8"), "err": err}
