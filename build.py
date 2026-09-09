@@ -82,7 +82,7 @@ def get_piopkg_dir(package_name):
 
 
 def run_cmake(args=None):
-    args = args or tuple()
+    args = args or []
     print("Running CMake with arguments", args)
     res = exec_command(["cmake"] + args)
     validate_exec_command(res, "CMake failed to run with args %s" % " ".join(args))
@@ -114,7 +114,7 @@ def configure_cmake_project(build_dir, install_dir, cmake_extra_flags=None):
 
 def install_cppcheck(build_dir):
     print("Building and installing project...")
-    cmake_args = ("--build", build_dir, "--target", "install")
+    cmake_args = ["--build", build_dir, "--target", "install"]
     run_cmake(cmake_args)
 
 
