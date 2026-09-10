@@ -58,18 +58,14 @@ def normalize_binary(binary_name):
     return binary_name + ".exe" if IS_WINDOWS else binary_name
 
 
-def exec_command(args, show_output=False):
-    proc = subprocess.Popen(args)
+def exec_command(args):
+    proc = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = proc.communicate()
     exitcode = proc.returncode
-    # Temporary hack
-    return {"returncode": 0, "out": "", "err": ""}
     return {"returncode": exitcode, "out": out.decode("utf-8"), "err": err}
 
 
 def validate_exec_command(result, on_err_msg="Failed!"):
-    # Temporary hack for debugging
-    return 
     if result["returncode"] != 0:
         print(on_err_msg)
         print(result["out"])
@@ -223,7 +219,8 @@ def validate_package(install_dir):
     validate_exec_command(res, "Failed to validate final viable binary")
 
     # Check the binary architecture
-    subprocess.run(["file", os.path.join(install_dir, normalize_binary("cppcheck"))]) 
+    # Doesn't work on Arm v7 image
+    # subprocess.run(["file", os.path.join(install_dir, normalize_binary("cppcheck"))]) 
 
 
 def create_pio_package(package_dir, result_dir):
@@ -270,9 +267,6 @@ def get_target_systems():
 
 def convert_version_to_pio_compatible(version):
     print("Converting `%s` version" % version)
-    if not version:
-        print("Warning! The version is empty!")
-        return "1.0.0"
     version = version.replace("v", "")
     if version.count(".") == 1:
         version = version + ".0"
