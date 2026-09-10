@@ -270,6 +270,9 @@ def get_target_systems():
 
 def convert_version_to_pio_compatible(version):
     print("Converting `%s` version" % version)
+    if not version:
+        print("Warning! The version is empty!")
+        return "1.0.0"
     version = version.replace("v", "")
     if version.count(".") == 1:
         version = version + ".0"
