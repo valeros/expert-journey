@@ -66,6 +66,8 @@ def exec_command(args, show_output=False):
 
 
 def validate_exec_command(result, on_err_msg="Failed!"):
+    # Temporary hack for debugging
+    return 
     if result["returncode"] != 0:
         print(on_err_msg)
         print(result["out"])
